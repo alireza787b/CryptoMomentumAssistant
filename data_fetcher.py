@@ -23,3 +23,5 @@ def fetch_crypto_data(crypto, timeframe, limit):
     else:
         # If the response is not successful, raise an error with the HTTP status code
         response.raise_for_status()
+
+

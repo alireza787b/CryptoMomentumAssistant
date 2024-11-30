@@ -9,6 +9,8 @@ __pycache__/
 API_KEY_SECRET.py
 
 
+out/
+
 # Distribution / packaging
 .Python
 build/
@@ -22,6 +24,7 @@ lib64/
 parts/
 sdist/
 var/
+out/
 wheels/
 share/python-wheels/
 *.egg-info/

@@ -36,6 +36,20 @@ def evaluate_optimized_strategy(timeframe_data):
 
     return strategy_scores
 
+
+def calculate_strategy_score(df, timeframe):
+    """
+    Calculate the strategy score (sqzScore) for the given DataFrame and timeframe.
+    """
+    # Mock function to represent the structure of evaluate_optimized_strategy
+    # Assumes evaluate_optimized_strategy takes a dictionary of dataframes keyed by timeframe
+    # and returns a dictionary of scores keyed by the same timeframes.
+    # This wrapper is to fit that into our existing per-timeframe calculation structure.
+    timeframe_data = {timeframe: df}
+    strategy_scores = evaluate_optimized_strategy(timeframe_data)
+    return strategy_scores.get(timeframe, 0)
+
+
 def generate_strategy_summary(strategy_scores, weighted_average_score, timeframe_weights):
     bullish_timeframes = [tf for tf, score in strategy_scores.items() if score and score > 0]
     bearish_timeframes = [tf for tf, score in strategy_scores.items() if score and score < 0]
@@ -117,3 +131,25 @@ def plot_combined_strategy_visualization(strategy_scores, timeframe_data):
     plt.tight_layout()
     plt.show(block=False)
 
+def calculate_vwap(timeframe_data, price_column='close', volume_column='volumeto', window=20):
+    """
+    Calculate the VWAP (Volume Weighted Average Price) over a specified rolling window.
+
+    Parameters:
+    - timeframe_data: A DataFrame containing at least 'price' and 'volume'.
+    - price_column: The column name for the price data (e.g., 'close').
+    - volume_column: The column name for the volume data (e.g., 'volume').
+    - window: The rolling window size to calculate the VWAP.
+
+    Returns:
+    - A Series representing the VWAP values.
+    """
+    # Multiply price by volume to get volume-weighted values
+    price_volume = timeframe_data[price_column] * timeframe_data[volume_column]
+    
+    # Sum up the price-volume products and divide by total volume over the rolling window
+    cumulative_price_volume = price_volume.rolling(window=window, min_periods=1).sum()
+    cumulative_volume = timeframe_data[volume_column].rolling(window=window, min_periods=1).sum()
+    
+    vwap = cumulative_price_volume / cumulative_volume
+    return vwap

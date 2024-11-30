@@ -58,3 +58,11 @@ def normalize_smi(df):
     df['normalized_SMI'] = df['SMI'].apply(lambda x: 2 * (x - smi_min) / (smi_max - smi_min) - 1 if (smi_max - smi_min) != 0 else 0)
 
     return df
+
+
+def calculate_rsi(df, period=14):
+    """
+    Calculate Relative Strength Index (RSI) using the 'ta' library.
+    """
+    rsi = ta.momentum.RSIIndicator(close=df["close"], window=period).rsi()
+    return rsi
